@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F5F5F5"
+    tools:context=".LoginActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:padding="24dp">
+
+        <!-- Logo -->
+        <ImageView
+            android:id="@+id/imgLogo"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginTop="60dp"
+            android:src="@drawable/logo_carwash"
+            android:scaleType="fitCenter"
+            android:contentDescription="Logo Car Wash" />
+
+        <!-- Título -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Car Wash Reservas"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            android:textColor="#1E88E5"
+            android:layout_marginTop="20dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Inicia sesión para continuar"
+            android:textSize="16sp"
+            android:textColor="#757575"
+            android:layout_marginBottom="36dp" />
+
+        <!-- Campos -->
+        <EditText
+            android:id="@+id/etEmail"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:hint="Correo electrónico"
+            android:inputType="textEmailAddress"
+            android:background="@drawable/edittext_rounded_bg"
+            android:padding="14dp"
+            android:layout_marginBottom="16dp" />
+
+        <EditText
+            android:id="@+id/etPassword"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:hint="Contraseña"
+            android:inputType="textPassword"
+            android:background="@drawable/edittext_rounded_bg"
+            android:padding="14dp"
+            android:layout_marginBottom="28dp" />
+
+        <!-- Botón Iniciar Sesión -->
+        <Button
+            android:id="@+id/btnLogin"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="INICIAR SESIÓN"
+            android:textStyle="bold"
+            android:background="@drawable/btn_primary"
+            android:textColor="#FFFFFF"
+            android:elevation="4dp"
+            android:layout_marginTop="10dp" />
+
+        <!-- Botón Registrarse -->
+        <Button
+            android:id="@+id/btnRegister"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="REGISTRARSE"
+            android:textStyle="bold"
+            android:background="@drawable/btn_secondary"
+            android:textColor="#FFFFFF"
+            android:elevation="4dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="40dp" />
+
+    </LinearLayout>
+</ScrollView>
