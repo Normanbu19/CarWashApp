@@ -1,3 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">CarWashApp</string>
+    <string-array name="servicios_array">
+        <item>Lavado general (Solo por fuera) - L.100 (En sitio L.150)</item>
+        <item>Lavado completo (Aplicando productos) - L.150 (En sitio L.200)</item>
+        <item>Cambio de aceite (Depende del modelo)</item>
+        <item>Lavado de motor - L.400</item>
+    </string-array>
 </resources>

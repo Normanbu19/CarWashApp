@@ -10,29 +10,47 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
 
-        <!-- LoginActivity será la pantalla principal (inicio) -->
+        <!-- 🔹 Pantalla principal (inicio de sesión) -->
         <activity
             android:name=".LoginActivity"
             android:exported="true">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <!-- Pantalla de registro -->
-        <activity
-            android:name=".RegisterActivity"
-            android:exported="false" />
+        <!-- 🔹 Pantalla de registro -->
+        <activity android:name=".RegisterActivity" android:exported="false" />
 
-        <!-- MainActivity (por si se usa más adelante en la app) -->
-        <activity
-            android:name=".MainActivity"
-            android:exported="false" />
+        <!-- 🔹 Pantalla de recuperación de contraseña -->
+        <activity android:name=".RecuperarContrasenaActivity" android:exported="false" />
 
-        <activity android:name=".HomeActivity" />
+        <!-- 🔹 Pantalla principal de usuario -->
+        <activity android:name=".HomeActivity" android:exported="false" />
+
+        <!-- 🔹 Pantalla de perfil del usuario -->
+        <activity android:name=".PerfilUsuarioActivity" android:exported="false" />
+
+        <!-- 🔹 Pantalla de agregar vehículo -->
+        <activity android:name=".AgregarVehiculoActivity" android:exported="false" />
+
+        <!-- 🔹 Pantalla de calificación de servicio -->
+        <activity android:name=".CalificacionServicioActivity" android:exported="false" />
+
+        <!-- 🔹 Pantalla de historial de servicios -->
+        <activity android:name=".HistorialServiciosActivity" android:exported="false" />
+
+        <!-- 🔹 Pantalla del mapa -->
+        <activity android:name=".MapaUbicacionActivity" android:exported="false" />
+
+        <!-- 🔹 Pantalla de solicitud de cotización -->
+        <activity android:name=".SolicitarCotizacionActivity" android:exported="false" />
+
+        <activity android:name=".VehiculoActivity" android:exported="false" />
+
+        <!-- 🔹 Pantalla base -->
+        <activity android:name=".MainActivity" android:exported="false" />
 
     </application>
-
 </manifest>

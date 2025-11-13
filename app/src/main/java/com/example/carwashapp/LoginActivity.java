@@ -2,7 +2,6 @@ package com.example.carwashapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.content.Intent;
 
@@ -28,6 +27,15 @@ public class LoginActivity extends AppCompatActivity {
         if (btnRegister != null) {
             btnRegister.setOnClickListener(v -> {
                 Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+                startActivity(intent);
+            });
+        }
+
+        // 🔹 Botón para recuperar contraseña
+        Button btnRecuperarContrasena = findViewById(R.id.btnRecuperarContrasena);
+        if (btnRecuperarContrasena != null) {
+            btnRecuperarContrasena.setOnClickListener(v -> {
+                Intent intent = new Intent(LoginActivity.this, RecuperarContrasenaActivity.class);
                 startActivity(intent);
             });
         }

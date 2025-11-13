@@ -24,7 +24,7 @@
             android:padding="24dp"
             android:gravity="center_horizontal">
 
-            <!-- Título -->
+            <!-- 🔹 Título -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -35,99 +35,56 @@
                 android:layout_marginTop="40dp"
                 android:layout_marginBottom="24dp" />
 
-            <!-- Botones superiores -->
+            <!-- 🔹 Logo principal -->
+            <ImageView
+                android:id="@+id/imgLogo"
+                android:layout_width="200dp"
+                android:layout_height="180dp"
+                android:src="@drawable/logo_carwash"
+                android:contentDescription="Logo CarWash"
+                android:layout_marginBottom="40dp"
+                android:scaleType="fitCenter" />
+
+            <!-- 🔹 Botones del menú principal -->
             <LinearLayout
+                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center">
+                android:layout_height="wrap_content">
 
                 <Button
-                    android:id="@+id/btnReservarAhora"
-                    android:layout_width="0dp"
+                    android:id="@+id/btnSolicitarCotizacion"
+                    android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:layout_weight="1"
-                    android:text="Reservar ahora"
+                    android:text="Solicitar Cotización"
                     android:textAllCaps="false"
                     android:textColor="#FFFFFF"
                     android:background="@drawable/btn_primary"
-                    android:layout_marginEnd="8dp" />
+                    android:layout_marginBottom="16dp" />
 
                 <Button
-                    android:id="@+id/btnMisReservas"
-                    android:layout_width="0dp"
+                    android:id="@+id/btnHistorialServicios"
+                    android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:layout_weight="1"
-                    android:text="Mis reservas"
+                    android:text="Historial de Servicios"
                     android:textAllCaps="false"
                     android:textColor="#FFFFFF"
-                    android:background="@drawable/btn_secondary" />
+                    android:background="@drawable/btn_secondary"
+                    android:layout_marginBottom="16dp" />
+
+                <Button
+                    android:id="@+id/btnCalificacionServicio"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:text="Calificación del Servicio"
+                    android:textAllCaps="false"
+                    android:textColor="#FFFFFF"
+                    android:background="@drawable/btn_primary"
+                    android:layout_marginBottom="16dp" />
             </LinearLayout>
-
-            <!-- Imagen central del carro -->
-            <ImageView
-                android:id="@+id/imgCar"
-                android:layout_width="240dp"
-                android:layout_height="200dp"
-                android:layout_marginTop="40dp"
-                android:src="@drawable/car_icon"
-                android:scaleType="fitCenter"
-                android:contentDescription="Carro" />
-
-            <!-- Botones de servicio -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="32dp">
-
-                <Button
-                    android:id="@+id/btnFull"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:text="Servicio Full - L. 250"
-                    android:textAllCaps="false"
-                    android:textColor="#FFFFFF"
-                    android:background="@drawable/btn_service_selector"
-                    android:layout_marginBottom="12dp" />
-
-                <Button
-                    android:id="@+id/btnExpress"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:text="Servicio Express - L. 150"
-                    android:textAllCaps="false"
-                    android:textColor="#FFFFFF"
-                    android:background="@drawable/btn_service_selector"
-                    android:layout_marginBottom="12dp" />
-
-                <Button
-                    android:id="@+id/btnAmorol"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:text="Pasta cerámica extra - L. 85"
-                    android:textAllCaps="false"
-                    android:textColor="#FFFFFF"
-                    android:background="@drawable/btn_service_selector"
-                    android:layout_marginBottom="20dp"
-                    android:clickable="true"
-                    android:focusable="true" />
-            </LinearLayout>
-
-            <!-- Botón de fecha -->
-            <Button
-                android:id="@+id/btnFechaHora"
-                android:layout_width="match_parent"
-                android:layout_height="55dp"
-                android:text="Seleccionar día y hora"
-                android:textAllCaps="false"
-                android:textColor="#FFFFFF"
-                android:background="@drawable/btn_red"
-                android:layout_marginTop="10dp" />
         </LinearLayout>
     </ScrollView>
 
-    <!-- Barra inferior con íconos -->
+    <!-- Barra inferior de navegación -->
     <LinearLayout
         android:id="@+id/bottom_nav"
         android:layout_width="match_parent"
@@ -152,10 +109,9 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:background="@null"
+                android:contentDescription="Inicio"
                 android:src="@drawable/ic_home"
-                android:tint="#FFFFFF"
-                android:scaleType="fitCenter"
-                android:contentDescription="Inicio" />
+                android:tint="#FFFFFF" />
         </LinearLayout>
 
         <!-- Botón Perfil -->
@@ -172,9 +128,7 @@
                 android:background="@null"
                 android:src="@drawable/ic_user"
                 android:tint="#FFFFFF"
-                android:scaleType="fitCenter"
                 android:contentDescription="Perfil" />
         </LinearLayout>
     </LinearLayout>
-
 </RelativeLayout>

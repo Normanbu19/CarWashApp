@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="#EEF1F7">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="24dp">
+
+        <!-- 🔹 Tarjeta centrada -->
+        <LinearLayout
+            android:id="@+id/cardContainer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/bg_card"
+            android:elevation="6dp"
+            android:padding="28dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:gravity="center_horizontal"
+            android:layout_marginVertical="40dp">
+
+            <!-- 🧾 Título -->
+            <TextView
+                android:text="Solicitar Cotización"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:textColor="#111827"
+                android:gravity="center"
+                android:layout_marginBottom="18dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <!-- 🚗 Campo de texto para escribir vehículo -->
+            <TextView
+                android:text="Escribe tu vehículo:"
+                android:textSize="16sp"
+                android:textColor="#374151"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <EditText
+                android:id="@+id/txtVehiculo"
+                android:hint="Ejemplo: Toyota Corolla 2020"
+                android:background="@drawable/bg_input_modern"
+                android:padding="12dp"
+                android:textColor="#111827"
+                android:textColorHint="#9CA3AF"
+                android:layout_marginBottom="18dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <!-- 🧰 Tipo de servicio -->
+            <TextView
+                android:text="Tipo de servicio:"
+                android:textSize="16sp"
+                android:textColor="#374151"
+                android:layout_marginBottom="4dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <Spinner
+                android:id="@+id/spinnerServicio"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_input_modern"
+                android:padding="12dp"
+                android:layout_marginBottom="18dp"
+                android:entries="@array/servicios_array" />
+
+            <!-- 📅 Fecha -->
+            <TextView
+                android:text="Fecha:"
+                android:textSize="16sp"
+                android:textColor="#374151"
+                android:layout_marginBottom="4dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <EditText
+                android:id="@+id/txtFecha"
+                android:hint="dd/mm/aaaa"
+                android:focusable="false"
+                android:background="@drawable/bg_input_modern"
+                android:padding="12dp"
+                android:textColorHint="#9CA3AF"
+                android:layout_marginBottom="18dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <!-- ⏰ Hora -->
+            <TextView
+                android:text="Hora:"
+                android:textSize="16sp"
+                android:textColor="#374151"
+                android:layout_marginBottom="4dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <EditText
+                android:id="@+id/txtHora"
+                android:hint="hh:mm"
+                android:focusable="false"
+                android:background="@drawable/bg_input_modern"
+                android:padding="12dp"
+                android:textColorHint="#9CA3AF"
+                android:layout_marginBottom="18dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <!-- 📍 Tipo de ubicación -->
+            <TextView
+                android:text="Ubicación del servicio:"
+                android:textSize="16sp"
+                android:textColor="#374151"
+                android:layout_marginBottom="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <RadioGroup
+                android:id="@+id/grupoUbicacion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_horizontal"
+                android:layout_marginBottom="26dp">
+
+                <RadioButton
+                    android:id="@+id/rbCentro"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Centro de servicio"
+                    android:textColor="#374151" />
+
+                <RadioButton
+                    android:id="@+id/rbDomicilio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="A domicilio"
+                    android:textColor="#374151"
+                    android:layout_marginStart="20dp" />
+            </RadioGroup>
+
+            <!-- 📤 Botón principal -->
+            <Button
+                android:id="@+id/btnEnviarCotizacion"
+                android:text="Enviar Solicitud"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                android:background="@drawable/bg_button_primary"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:elevation="3dp" />
+        </LinearLayout>
+
+        <!-- 🚘 Ícono decorativo superior -->
+        <FrameLayout
+            android:id="@+id/heroCircle"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:background="@drawable/bg_icon_circle"
+            android:elevation="8dp"
+            app:layout_constraintBottom_toTopOf="@id/cardContainer"
+            app:layout_constraintStart_toStartOf="@id/cardContainer"
+            app:layout_constraintEnd_toEndOf="@id/cardContainer"
+            android:translationY="30dp"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:src="@drawable/logo_carwash"
+                android:tint="@color/cardview_shadow_end_color" />
+        </FrameLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
