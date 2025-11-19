@@ -2,15 +2,37 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.carwashapp">
 
+    <!-- 📌 Permisos globales necesarios -->
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
+    <!-- 📌 Permisos para mapa -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+
+    <!-- 📌 Permisos para tomar foto -->
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
+
+    <!-- Android 12 o menor -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="Car Wash App"
         android:roundIcon="@mipmap/ic_launcher_round"
+        android:usesCleartextTraffic="true"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
 
-        <!-- 🔹 Pantalla principal (inicio de sesión) -->
+    <!-- 🔹 Pantalla principal (inicio de sesión) -->
         <activity
             android:name=".LoginActivity"
             android:exported="true">
@@ -52,5 +74,12 @@
         <!-- 🔹 Pantalla base -->
         <activity android:name=".MainActivity" android:exported="false" />
 
+        <activity android:name=".CambiarContrasenaActivity" android:exported="false" />
+
+        <activity android:name=".ConfirmarCodigoActivity" />
+
+
+
     </application>
+
 </manifest>
