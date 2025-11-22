@@ -76,6 +76,10 @@
         <activity android:name=".MainActivity" android:exported="false" />
         <activity android:name=".CambiarContrasenaActivity" android:exported="false" />
         <activity android:name=".ConfirmarCodigoActivity" android:exported="false" />
+        <activity android:name=".AdminCotizacionesActivity" android:exported="false" />
+        <activity android:name=".AdminUsuariosActivity" android:exported="false" />
+        <activity android:name=".AdminVehiculosActivity" android:exported="false" />
+        <activity android:name=".AdminDashboardActivity" android:exported="false" />
 
         <!-- Mapa Google (ya no OSMDroid) -->
         <activity android:name=".MapaUbicacionActivity" android:exported="false" />

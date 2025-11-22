@@ -1,10 +1,5 @@
 package com.example.carwashapp;
 
-import android.os.Bundle;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.Toast;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
@@ -31,7 +26,7 @@ public class HistorialServiciosActivity extends AppCompatActivity {
 
     private Button btnFiltroAceite, btnFiltroLavados, btnHistorialVehiculos;
 
-    private int ID_USUARIO = 1;
+    private int ID_USUARIO = 1; // Se debe recibir con intent
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,10 +43,9 @@ public class HistorialServiciosActivity extends AppCompatActivity {
         btnFiltroAceite.setOnClickListener(v -> filtrarAceite());
         btnFiltroLavados.setOnClickListener(v -> filtrarLavados());
 
-        // 🟦 ESTE ERA EL QUE TE FALTABA
-        btnHistorialVehiculos.setOnClickListener(v -> {
-            startActivity(new Intent(HistorialServiciosActivity.this, VehiculoActivity.class));
-        });
+        btnHistorialVehiculos.setOnClickListener(v ->
+                startActivity(new Intent(HistorialServiciosActivity.this, VehiculoActivity.class))
+        );
     }
 
     private void cargarHistorial() {
@@ -63,6 +57,7 @@ public class HistorialServiciosActivity extends AppCompatActivity {
                     try {
 
                         JSONObject json = new JSONObject(resp);
+
                         if (!json.getBoolean("ok")) return;
 
                         JSONArray data = json.getJSONArray("data");
@@ -71,13 +66,13 @@ public class HistorialServiciosActivity extends AppCompatActivity {
                         registros.clear();
 
                         for (int i = 0; i < data.length(); i++) {
+
                             JSONObject h = data.getJSONObject(i);
                             registros.add(h);
 
                             String item =
                                     "🔧 Servicio: " + h.getString("servicio") + "\n" +
-                                            "Vehículo: " + h.getString("marca") + " " +
-                                            h.getString("modelo") + "\n" +
+                                            "Vehículo: " + h.getString("marca") + " " + h.getString("modelo") + "\n" +
                                             "Fecha: " + h.getString("fecha_realizada");
 
                             listaCompleta.add(item);
@@ -86,7 +81,7 @@ public class HistorialServiciosActivity extends AppCompatActivity {
                         actualizarLista(listaCompleta);
 
                     } catch (Exception e) {
-                        Toast.makeText(this, "Error al procesar datos", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Error al procesar historial", Toast.LENGTH_SHORT).show();
                     }
                 },
                 error -> Toast.makeText(this, "Error conectando al servidor", Toast.LENGTH_SHORT).show()
@@ -96,46 +91,57 @@ public class HistorialServiciosActivity extends AppCompatActivity {
     }
 
     private void actualizarLista(ArrayList<String> lista) {
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_1,
-                lista);
+
+        ArrayAdapter<String> adapter =
+                new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, lista);
+
         listHistorial.setAdapter(adapter);
     }
 
     private void filtrarAceite() {
+
         ArrayList<String> filtrada = new ArrayList<>();
 
         for (JSONObject h : registros) {
             try {
-                String s = h.getString("servicio").toLowerCase();
-                if (s.contains("aceite")) filtrada.add(
-                        "🛢 Cambio de aceite\n" +
-                                "Vehículo: " + h.getString("marca") + " " + h.getString("modelo") + "\n" +
-                                "Fecha: " + h.getString("fecha_realizada")
-                );
+
+                if (h.getString("servicio").toLowerCase().contains("aceite")) {
+
+                    filtrada.add(
+                            "🛢 Cambio de aceite\n" +
+                                    "Vehículo: " + h.getString("marca") + " " + h.getString("modelo") + "\n" +
+                                    "Fecha: " + h.getString("fecha_realizada")
+                    );
+                }
+
             } catch (Exception ignored) {}
         }
 
-        if (filtrada.isEmpty()) filtrada.add("No hay cambios de aceite.");
+        if (filtrada.isEmpty()) filtrada.add("No hay servicios de aceite.");
 
         actualizarLista(filtrada);
     }
 
     private void filtrarLavados() {
+
         ArrayList<String> filtrada = new ArrayList<>();
 
         for (JSONObject h : registros) {
             try {
-                String s = h.getString("servicio").toLowerCase();
-                if (s.contains("lavado")) filtrada.add(
-                        "🚗 Lavado\n" +
-                                "Vehículo: " + h.getString("marca") + " " + h.getString("modelo") + "\n" +
-                                "Fecha: " + h.getString("fecha_realizada")
-                );
+
+                if (h.getString("servicio").toLowerCase().contains("lavado")) {
+
+                    filtrada.add(
+                            "🚗 Lavado\n" +
+                                    "Vehículo: " + h.getString("marca") + " " + h.getString("modelo") + "\n" +
+                                    "Fecha: " + h.getString("fecha_realizada")
+                    );
+                }
+
             } catch (Exception ignored) {}
         }
 
-        if (filtrada.isEmpty()) filtrada.add("No hay servicios de lavado.");
+        if (filtrada.isEmpty()) filtrada.add("No hay lavados realizados.");
 
         actualizarLista(filtrada);
     }
