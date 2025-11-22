@@ -2,27 +2,38 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.carwashapp">
 
-    <!-- 📌 Permisos globales necesarios -->
+    <!-- ==============================
+         📌 PERMISOS GENERALES
+    =============================== -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <!-- ==============================
+         📌 PERMISOS GPS / UBICACIÓN
+    =============================== -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <!-- ==============================
+         📌 PERMISOS MULTIMEDIA / CÁMARA
+    =============================== -->
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.CAMERA" />
 
-    <!-- 📌 Permisos para mapa -->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <!-- Android 13 -->
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
 
-    <!-- 📌 Permisos para tomar foto -->
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
-
-    <!-- Android 12 o menor -->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+    <!-- Android 12 y menor -->
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" />
 
-
+    <!-- ==============================
+         📌 CONFIGURACIÓN GENERAL
+    =============================== -->
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -32,7 +43,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
 
-    <!-- 🔹 Pantalla principal (inicio de sesión) -->
+        <!-- ==============================
+             📌 GOOGLE MAPS API KEY (AQUÍ!)
+        =============================== -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDVKBejrM9Nmlj1EE9cawGQ7x5JNqfwKYQ" />
+
+        <!-- ==============================
+             ACTIVIDADES DE LA APP
+        =============================== -->
+
+        <!-- Login -->
         <activity
             android:name=".LoginActivity"
             android:exported="true">
@@ -42,43 +64,21 @@
             </intent-filter>
         </activity>
 
-        <!-- 🔹 Pantalla de registro -->
         <activity android:name=".RegisterActivity" android:exported="false" />
-
-        <!-- 🔹 Pantalla de recuperación de contraseña -->
         <activity android:name=".RecuperarContrasenaActivity" android:exported="false" />
-
-        <!-- 🔹 Pantalla principal de usuario -->
         <activity android:name=".HomeActivity" android:exported="false" />
-
-        <!-- 🔹 Pantalla de perfil del usuario -->
         <activity android:name=".PerfilUsuarioActivity" android:exported="false" />
-
-        <!-- 🔹 Pantalla de agregar vehículo -->
         <activity android:name=".AgregarVehiculoActivity" android:exported="false" />
-
-        <!-- 🔹 Pantalla de calificación de servicio -->
         <activity android:name=".CalificacionServicioActivity" android:exported="false" />
-
-        <!-- 🔹 Pantalla de historial de servicios -->
         <activity android:name=".HistorialServiciosActivity" android:exported="false" />
-
-        <!-- 🔹 Pantalla del mapa -->
-        <activity android:name=".MapaUbicacionActivity" android:exported="false" />
-
-        <!-- 🔹 Pantalla de solicitud de cotización -->
         <activity android:name=".SolicitarCotizacionActivity" android:exported="false" />
-
         <activity android:name=".VehiculoActivity" android:exported="false" />
-
-        <!-- 🔹 Pantalla base -->
         <activity android:name=".MainActivity" android:exported="false" />
-
         <activity android:name=".CambiarContrasenaActivity" android:exported="false" />
+        <activity android:name=".ConfirmarCodigoActivity" android:exported="false" />
 
-        <activity android:name=".ConfirmarCodigoActivity" />
-
-
+        <!-- Mapa Google (ya no OSMDroid) -->
+        <activity android:name=".MapaUbicacionActivity" android:exported="false" />
 
     </application>
 

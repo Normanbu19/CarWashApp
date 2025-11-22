@@ -21,7 +21,7 @@ public class ConfirmarCodigoActivity extends AppCompatActivity {
     EditText edtCorreo, edtCodigo;
     Button btnConfirmar;
 
-    // 👉 SOLO verifica código, NO cambia contraseña
+    //SOLO verifica código, NO cambia contraseña
     String URL_CONFIRMAR = "http://18.191.153.112/api_carwash/usuarios/confirmar_recuperacion.php";
 
     @Override
@@ -70,7 +70,7 @@ public class ConfirmarCodigoActivity extends AppCompatActivity {
                                     Toast.LENGTH_SHORT
                             ).show();
 
-                            // ✅ AQUÍ SOLO NAVEGAS A CAMBIAR CONTRASEÑA
+                            //AQUÍ SOLO NAVEGAS A CAMBIAR CONTRASEÑA
                             Intent i = new Intent(
                                     ConfirmarCodigoActivity.this,
                                     CambiarContrasenaActivity.class
@@ -106,7 +106,7 @@ public class ConfirmarCodigoActivity extends AppCompatActivity {
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
                 params.put("correo", correo);
-                params.put("codigo", codigo);   // 👈 SOLO ESTO
+                params.put("codigo", codigo);
                 return params;
             }
         };

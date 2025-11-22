@@ -25,16 +25,14 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constrainedWidth="true"
             android:layout_marginTop="80dp"
-            android:layout_marginBottom="50dp"
-            android:layout_marginHorizontal="8dp">
+            android:layout_marginBottom="60dp">
 
             <Space
                 android:layout_width="1dp"
                 android:layout_height="45dp" />
 
-            <!-- 🧾 Título -->
+            <!-- Título -->
             <TextView
                 android:id="@+id/txtTitulo"
                 android:text="Historial de Servicios"
@@ -46,7 +44,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp" />
 
-            <!-- 📋 Lista -->
+            <!-- Lista -->
             <ListView
                 android:id="@+id/listHistorial"
                 android:layout_width="match_parent"
@@ -56,26 +54,53 @@
                 android:background="#F9FAFB"
                 android:elevation="2dp"
                 android:padding="10dp"
-                android:layout_marginBottom="24dp" />
+                android:layout_marginBottom="20dp" />
 
-            <!-- 🚗 Botón adaptado -->
-            <Button
-                android:id="@+id/btnHistorialVehiculos"
-                android:text="Historial de Vehículos"
-                android:textAllCaps="false"
-                android:textSize="16sp"
-                android:textColor="#FFFFFF"
-                android:background="@drawable/bg_button_primary"
+            <!-- NUEVA FILA HORIZONTAL DE BOTONES -->
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:elevation="5dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="6dp"
-                android:paddingVertical="10dp" />
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginTop="10dp">
+
+                <Button
+                    android:id="@+id/btnHistorialVehiculos"
+                    android:layout_width="0dp"
+                    android:layout_height="45dp"
+                    android:layout_weight="1"
+                    android:text="Vehículos"
+                    android:textAllCaps="false"
+                    android:textColor="#FFFFFF"
+                    android:background="@drawable/bg_button_primary"
+                    android:layout_marginEnd="6dp" />
+
+                <Button
+                    android:id="@+id/btnFiltroAceite"
+                    android:layout_width="0dp"
+                    android:layout_height="45dp"
+                    android:layout_weight="1"
+                    android:text="Aceite"
+                    android:textAllCaps="false"
+                    android:textColor="#FFFFFF"
+                    android:background="@drawable/bg_button_secondary"
+                    android:layout_marginHorizontal="6dp" />
+
+                <Button
+                    android:id="@+id/btnFiltroLavados"
+                    android:layout_width="0dp"
+                    android:layout_height="45dp"
+                    android:layout_weight="1"
+                    android:text="Lavados"
+                    android:textAllCaps="false"
+                    android:textColor="#FFFFFF"
+                    android:background="@drawable/bg_button_primary"
+                    android:layout_marginStart="6dp" />
+            </LinearLayout>
 
         </LinearLayout>
 
-        <!-- Ícono superior -->
+        <!-- TU ÍCONO (NO TOCADO) -->
         <FrameLayout
             android:id="@+id/heroCircle"
             android:layout_width="90dp"

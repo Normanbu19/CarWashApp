@@ -32,7 +32,7 @@ public class CambiarContrasenaActivity extends AppCompatActivity {
         edtNuevaContrasena = findViewById(R.id.edtNuevaContrasena);
         btnCambiar = findViewById(R.id.btnCambiarContrasena);
 
-        // 👇 vienen desde ConfirmarCodigoActivity
+        //  vienen desde ConfirmarCodigoActivity
         correo = getIntent().getStringExtra("correo");
         codigo = getIntent().getStringExtra("codigo");
 
@@ -89,7 +89,7 @@ public class CambiarContrasenaActivity extends AppCompatActivity {
                 Map<String, String> params = new HashMap<>();
                 params.put("correo", correo);
                 params.put("codigo", codigo);
-                params.put("nueva_contrasena", nueva);   // 👈 AQUÍ SÍ VA
+                params.put("nueva_contrasena", nueva);   //  AQUÍ SÍ VA
                 return params;
             }
         };

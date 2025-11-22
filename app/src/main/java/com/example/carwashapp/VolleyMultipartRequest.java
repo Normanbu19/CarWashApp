@@ -41,7 +41,7 @@ public abstract class VolleyMultipartRequest extends Request<String> {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
 
         try {
-            // 🔹 Parámetros normales
+            //  Parámetros normales
             Map<String, String> params = getParams();
             if (params != null) {
                 for (String key : params.keySet()) {
@@ -53,7 +53,7 @@ public abstract class VolleyMultipartRequest extends Request<String> {
                 }
             }
 
-            // 🔹 Archivos (imágenes)
+            //  Archivos (imágenes)
             Map<String, DataPart> data = getByteData();
             if (data != null) {
                 for (String key : data.keySet()) {

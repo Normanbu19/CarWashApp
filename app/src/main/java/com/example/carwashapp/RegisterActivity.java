@@ -19,8 +19,9 @@ import java.util.Map;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    EditText etNombre, etCorreo, etPassword, etConfirmPassword;
+    EditText etNombre, etApellido, etCorreo, etPassword, etConfirmPassword, etPais;
     Button btnRegistrar;
+
     String URL_REGISTRAR = "http://18.191.153.112/api_carwash/usuarios/registrar.php";
 
     @Override
@@ -29,9 +30,12 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register);
 
         etNombre = findViewById(R.id.etNombre);
+        etApellido = findViewById(R.id.etApellido);
         etCorreo = findViewById(R.id.etCorreo);
         etPassword = findViewById(R.id.etPassword);
         etConfirmPassword = findViewById(R.id.etConfirmPassword);
+        etPais = findViewById(R.id.etPais);
+
         btnRegistrar = findViewById(R.id.btnRegistrar);
 
         btnRegistrar.setOnClickListener(v -> registrarUsuario());
@@ -41,15 +45,15 @@ public class RegisterActivity extends AppCompatActivity {
     private void registrarUsuario() {
 
         String nombre = etNombre.getText().toString().trim();
+        String apellido = etApellido.getText().toString().trim();
         String correo = etCorreo.getText().toString().trim();
         String pass = etPassword.getText().toString().trim();
         String confirm = etConfirmPassword.getText().toString().trim();
+        String pais = etPais.getText().toString().trim();
 
-
-
-        //VALIDACIONES
-
-        if (nombre.isEmpty() || correo.isEmpty() || pass.isEmpty() || confirm.isEmpty()) {
+        // VALIDACIONES
+        if (nombre.isEmpty() || apellido.isEmpty() || correo.isEmpty() ||
+                pass.isEmpty() || confirm.isEmpty() || pais.isEmpty()) {
             mostrar("Todos los campos son obligatorios");
             return;
         }
@@ -69,21 +73,18 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         }
 
-
-
         // PETICIÓN VOLLEY
-        StringRequest request = new StringRequest(Request.Method.POST, URL_REGISTRAR,
+        StringRequest request = new StringRequest(
+                Request.Method.POST,
+                URL_REGISTRAR,
                 response -> {
                     try {
                         JSONObject json = new JSONObject(response);
 
                         if (json.getBoolean("ok")) {
                             mostrar("Registro exitoso");
-
-                            // Enviar al login
                             startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
                             finish();
-
                         } else {
                             mostrar(json.getString("msg"));
                         }
@@ -92,18 +93,17 @@ public class RegisterActivity extends AppCompatActivity {
                         mostrar("Error al procesar la respuesta del servidor");
                     }
                 },
-
-                error -> {
-                    mostrar("Ocurrió un error al conectar con el servidor");
-                }
+                error -> mostrar("Ocurrió un error al conectar con el servidor")
         ) {
 
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
                 params.put("nombre", nombre);
+                params.put("apellido", apellido);
                 params.put("correo", correo);
                 params.put("contrasena", pass);
+                params.put("pais", pais);
                 return params;
             }
         };

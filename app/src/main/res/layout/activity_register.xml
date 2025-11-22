@@ -49,7 +49,29 @@
             android:id="@+id/etNombre"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Nombre completo"
+            android:hint="Nombre"
+            android:inputType="textPersonName"
+            android:background="@drawable/edittext_bg"
+            android:padding="12dp"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Campo Apellido -->
+        <EditText
+            android:id="@+id/etApellido"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Apellido"
+            android:inputType="textPersonName"
+            android:background="@drawable/edittext_bg"
+            android:padding="12dp"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Campo País -->
+        <EditText
+            android:id="@+id/etPais"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="País"
             android:inputType="textPersonName"
             android:background="@drawable/edittext_bg"
             android:padding="12dp"
@@ -98,7 +120,7 @@
             android:textColor="#FFFFFF"
             android:layout_marginBottom="16dp" />
 
-        <!-- Botón volver al Login -->
+        <!-- Ir a login -->
         <TextView
             android:id="@+id/tvVolverLogin"
             android:layout_width="wrap_content"

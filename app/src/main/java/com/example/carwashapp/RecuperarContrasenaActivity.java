@@ -21,7 +21,7 @@ public class RecuperarContrasenaActivity extends AppCompatActivity {
     EditText edtCorreo;
     Button btnEnviar;
 
-    // 👉 URL de tu servidor AWS
+    //  URL de tu servidor AWS
     String URL_SOLICITAR = "http://18.191.153.112/api_carwash/usuarios/solicitar_recuperacion.php";
 
     @Override
@@ -51,13 +51,13 @@ public class RecuperarContrasenaActivity extends AppCompatActivity {
 
                         if (json.getBoolean("ok")) {
 
-                            // 🔹 Obtener y mostrar el código (solo modo pruebas)
+                            //  Obtener y mostrar el código (solo modo pruebas)
                             String codigo = json.getJSONObject("data").getString("codigo");
                             Toast.makeText(this,
                                     "Código recibido: " + codigo,
                                     Toast.LENGTH_LONG).show();
 
-                            // 🔹 Pasar el correo a la siguiente Activity
+                            //  Pasar el correo a la siguiente Activity
                             Intent i = new Intent(this, ConfirmarCodigoActivity.class);
                             i.putExtra("correo", correo);
                             startActivity(i);

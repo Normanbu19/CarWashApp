@@ -59,7 +59,7 @@ public class LoginActivity extends AppCompatActivity {
         String correo = etEmail.getText().toString().trim();
         String contrasena = etPassword.getText().toString().trim();
 
-        // 🔹 Validación: campos vacíos
+        //  Validación: campos vacíos
         if (correo.isEmpty()) {
             etEmail.setError("Ingresa tu correo");
             etEmail.requestFocus();
@@ -72,14 +72,14 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        // 🔹 Validación: formato de correo
+        //  Validación: formato de correo
         if (!android.util.Patterns.EMAIL_ADDRESS.matcher(correo).matches()) {
             etEmail.setError("Correo no válido");
             etEmail.requestFocus();
             return;
         }
 
-        // 🔹 Petición a tu API
+        //  Petición a tu API
         StringRequest request = new StringRequest(Request.Method.POST, URL_LOGIN,
                 response -> {
                     try {
@@ -96,7 +96,7 @@ public class LoginActivity extends AppCompatActivity {
                             finish();
 
                         } else {
-                            // 🔹 Mensaje del servidor
+                            //  Mensaje del servidor
                             Toast.makeText(this, json.getString("msg"), Toast.LENGTH_SHORT).show();
                         }
 
@@ -106,7 +106,7 @@ public class LoginActivity extends AppCompatActivity {
                 },
 
                 error -> {
-                    // 🔹 No mostrar errores feos → mensaje limpio
+                    //  No mostrar errores feos → mensaje limpio
                     Toast.makeText(this, "Correo o contraseña incorrectos", Toast.LENGTH_SHORT).show();
                 }
         ) {
