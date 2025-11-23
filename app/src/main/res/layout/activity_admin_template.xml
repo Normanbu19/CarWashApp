@@ -23,7 +23,6 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginTop="80dp"
             android:layout_marginBottom="60dp">
 
@@ -41,6 +40,20 @@
                 android:gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp" />
+
+            <!-- 🔍 BARRA DE BÚSQUEDA -->
+            <EditText
+                android:id="@+id/edtBuscar"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:hint="Buscar..."
+                android:padding="12dp"
+                android:background="@drawable/bg_input_modern"
+                android:drawableLeft="@android:drawable/ic_menu_search"
+                android:drawablePadding="10dp"
+                android:textColor="#111827"
+                android:textColorHint="#9CA3AF"
                 android:layout_marginBottom="16dp" />
 
             <!-- LISTA DINÁMICA -->

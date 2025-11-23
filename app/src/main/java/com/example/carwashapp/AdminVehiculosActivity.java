@@ -1,7 +1,10 @@
 package com.example.carwashapp;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -20,8 +23,14 @@ import java.util.ArrayList;
 
 public class AdminVehiculosActivity extends AppCompatActivity {
 
+    TextView txtTitulo;
+    ImageView iconMain;
     ListView list;
+    EditText edtBuscar;
+
     ArrayList<String> datos = new ArrayList<>();
+    ArrayList<String> datosFiltrados = new ArrayList<>();
+    ArrayAdapter<String> adaptador;
 
     String URL_LISTAR = "http://18.191.153.112/api_carwash/vehiculos/listar_admin.php";
 
@@ -30,19 +39,32 @@ public class AdminVehiculosActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_template);
 
-        // 🔥🔥🔥 ESTE ES EL TÍTULO COMO EN COTIZACIONES 🔥🔥🔥
-        TextView txtTitulo = findViewById(R.id.txtTitulo);
-        txtTitulo.setText("Vehículos Registrados");
-
-        // 🔥🔥🔥 ICONO DINÁMICO 🔥🔥🔥
-        ImageView iconMain = findViewById(R.id.iconMain);
-        iconMain.setImageResource(R.drawable.ic_car); // Usa un icono que tengas
-
+        txtTitulo = findViewById(R.id.txtTitulo);
+        iconMain = findViewById(R.id.iconMain);
         list = findViewById(R.id.listGeneral);
+        edtBuscar = findViewById(R.id.edtBuscar);
+
+        // 🔥 Título e ícono dinámico
+        txtTitulo.setText("Vehículos Registrados");
+        iconMain.setImageResource(R.drawable.ic_car);
 
         cargarVehiculos();
+
+        // 🔍 Filtro en tiempo real
+        edtBuscar.addTextChangedListener(new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void afterTextChanged(Editable s) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                filtrar(s.toString());
+            }
+        });
     }
 
+    // =====================================================
+    // LISTAR VEHÍCULOS
+    // =====================================================
     void cargarVehiculos() {
 
         StringRequest req = new StringRequest(Request.Method.GET, URL_LISTAR,
@@ -53,6 +75,7 @@ public class AdminVehiculosActivity extends AppCompatActivity {
                         if (!json.getBoolean("ok")) return;
 
                         JSONArray arr = json.getJSONArray("data");
+
                         datos.clear();
 
                         for (int i = 0; i < arr.length(); i++) {
@@ -75,8 +98,13 @@ public class AdminVehiculosActivity extends AppCompatActivity {
                             );
                         }
 
-                        list.setAdapter(new ArrayAdapter<>(this,
-                                android.R.layout.simple_list_item_1, datos));
+                        datosFiltrados.clear();
+                        datosFiltrados.addAll(datos);
+
+                        adaptador = new ArrayAdapter<>(this,
+                                android.R.layout.simple_list_item_1, datosFiltrados);
+
+                        list.setAdapter(adaptador);
 
                     } catch (Exception e) {
                         Toast.makeText(this, "Error procesando datos", Toast.LENGTH_SHORT).show();
@@ -86,5 +114,20 @@ public class AdminVehiculosActivity extends AppCompatActivity {
         );
 
         Volley.newRequestQueue(this).add(req);
+    }
+
+    // =====================================================
+    // 🔍 FILTRO
+    // =====================================================
+    void filtrar(String texto) {
+        datosFiltrados.clear();
+
+        for (String item : datos) {
+            if (item.toLowerCase().contains(texto.toLowerCase())) {
+                datosFiltrados.add(item);
+            }
+        }
+
+        if (adaptador != null) adaptador.notifyDataSetChanged();
     }
 }

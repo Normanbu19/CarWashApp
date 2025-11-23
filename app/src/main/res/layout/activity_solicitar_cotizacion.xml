@@ -156,28 +156,6 @@
                     android:layout_marginStart="20dp" />
             </RadioGroup>
 
-
-            <!-- RESUMEN -->
-            <TextView
-                android:text="Resumen de la solicitud:"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:textColor="#111827"
-                android:layout_marginBottom="4dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <TextView
-                android:id="@+id/txtResumen"
-                android:text="Aquí aparecerá un resumen antes de enviar."
-                android:textColor="#6B7280"
-                android:textSize="14sp"
-                android:background="#F3F4F6"
-                android:padding="14dp"
-                android:layout_marginBottom="20dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
             <!-- BOTÓN ENVIAR -->
             <Button
                 android:id="@+id/btnEnviarCotizacion"

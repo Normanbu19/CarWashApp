@@ -10,7 +10,6 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.ArrayAdapter;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -37,10 +36,8 @@ public class SolicitarCotizacionActivity extends AppCompatActivity {
     private RadioButton rbCentro, rbDomicilio;
 
     private EditText txtFecha, txtHora;
-    private TextView txtResumen;
     private Button btnEnviarCotizacion;
 
-    // ❗ AHORA YA NO ES 1 FIJO — SE CARGA DESDE SharedPreferences
     private int ID_USUARIO;
 
     public static String LAT = "0";
@@ -52,7 +49,6 @@ public class SolicitarCotizacionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_solicitar_cotizacion);
 
-        // 🔥 OBTENER ID DE USUARIO LOGUEADO
         ID_USUARIO = getSharedPreferences("usuario", MODE_PRIVATE)
                 .getInt("id_usuario", -1);
 
@@ -69,7 +65,6 @@ public class SolicitarCotizacionActivity extends AppCompatActivity {
         grupoUbicacion = findViewById(R.id.grupoUbicacion);
         rbCentro = findViewById(R.id.rbCentro);
         rbDomicilio = findViewById(R.id.rbDomicilio);
-        txtResumen = findViewById(R.id.txtResumen);
         btnEnviarCotizacion = findViewById(R.id.btnEnviarCotizacion);
 
         cargarVehiculos();
@@ -139,10 +134,10 @@ public class SolicitarCotizacionActivity extends AppCompatActivity {
 
         ArrayList<String> lista = new ArrayList<>();
 
-        lista.add("Lavado general - L100 (L150 domicilio)");
-        lista.add("Lavado completo - L150 (L200 domicilio)");
-        lista.add("Cambio de aceite (solo en centro)");
-        lista.add("Lavado de motor L400 (solo en centro)");
+        lista.add("Lavado basico - L150 (domicilio)");
+        lista.add("Lavado completo - L250 (domicilio)");
+        lista.add("Cambio de aceite - L600 (solo en centro)");
+        lista.add("Lavado de motor - L400 (solo en centro)");
 
         ArrayAdapter<String> adapter =
                 new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, lista);

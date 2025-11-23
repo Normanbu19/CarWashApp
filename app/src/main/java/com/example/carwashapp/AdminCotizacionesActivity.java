@@ -2,7 +2,10 @@ package com.example.carwashapp;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -26,8 +29,12 @@ public class AdminCotizacionesActivity extends AppCompatActivity {
     TextView txtTitulo;
     ImageView iconMain;
     ListView list;
+    EditText edtBuscar;
 
     ArrayList<String> datos = new ArrayList<>();
+    ArrayList<String> datosFiltrados = new ArrayList<>();
+    ArrayAdapter<String> adaptador;
+
     ArrayList<Integer> ids = new ArrayList<>();
 
     String URL_LISTAR = "http://18.191.153.112/api_carwash/cotizaciones/listar.php";
@@ -42,6 +49,7 @@ public class AdminCotizacionesActivity extends AppCompatActivity {
         txtTitulo = findViewById(R.id.txtTitulo);
         iconMain = findViewById(R.id.iconMain);
         list = findViewById(R.id.listGeneral);
+        edtBuscar = findViewById(R.id.edtBuscar);
 
         txtTitulo.setText("Gestión de Cotizaciones");
         iconMain.setImageResource(R.drawable.ic_cotizacion);
@@ -53,10 +61,21 @@ public class AdminCotizacionesActivity extends AppCompatActivity {
             int idCotizacion = ids.get(position);
             mostrarMenuAcciones(idCotizacion);
         });
+
+        // 🔍 BÚSQUEDA EN TIEMPO REAL
+        edtBuscar.addTextChangedListener(new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void afterTextChanged(Editable s) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                filtrar(s.toString());
+            }
+        });
     }
 
     // =====================================================
-    // LISTAR COTIZACIONES (CORREGIDO)
+    // LISTAR COTIZACIONES
     // =====================================================
     void cargar() {
 
@@ -91,8 +110,13 @@ public class AdminCotizacionesActivity extends AppCompatActivity {
                             );
                         }
 
-                        list.setAdapter(new ArrayAdapter<>(this,
-                                android.R.layout.simple_list_item_1, datos));
+                        datosFiltrados.clear();
+                        datosFiltrados.addAll(datos);
+
+                        adaptador = new ArrayAdapter<>(this,
+                                android.R.layout.simple_list_item_1, datosFiltrados);
+
+                        list.setAdapter(adaptador);
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -102,6 +126,21 @@ public class AdminCotizacionesActivity extends AppCompatActivity {
         );
 
         Volley.newRequestQueue(this).add(req);
+    }
+
+    // =====================================================
+    // 🔍 FILTRO
+    // =====================================================
+    void filtrar(String texto) {
+        datosFiltrados.clear();
+
+        for (String item : datos) {
+            if (item.toLowerCase().contains(texto.toLowerCase())) {
+                datosFiltrados.add(item);
+            }
+        }
+
+        adaptador.notifyDataSetChanged();
     }
 
     // =====================================================
