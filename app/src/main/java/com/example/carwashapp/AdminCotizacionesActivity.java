@@ -56,7 +56,7 @@ public class AdminCotizacionesActivity extends AppCompatActivity {
     }
 
     // =====================================================
-    // LISTAR COTIZACIONES
+    // LISTAR COTIZACIONES (CORREGIDO)
     // =====================================================
     void cargar() {
 
@@ -75,14 +75,19 @@ public class AdminCotizacionesActivity extends AppCompatActivity {
                         for (int i = 0; i < arr.length(); i++) {
                             JSONObject o = arr.getJSONObject(i);
 
-                            ids.add(o.getInt("id"));
+                            ids.add(o.optInt("id"));
+
+                            String nombre = o.optString("usuario_nombre", "Desconocido");
+                            String apellido = o.optString("usuario_apellido", "");
+                            String servicio = o.optString("servicio_nombre", "N/A");
+                            String precio = o.optString("servicio_precio", "0");
+                            String estado = o.optString("estado", "N/A");
 
                             datos.add(
-                                    "Cotización #" + o.getInt("id") +
-                                            "\nCliente: " + o.getString("usuario_nombre") +
-                                            " " + o.getString("usuario_apellido") +
-                                            "\nServicio: " + o.getString("servicio_nombre") +
-                                            "\nEstado: " + o.getString("estado")
+                                    "Cotización #" + o.optInt("id") +
+                                            "\nCliente: " + nombre + " " + apellido +
+                                            "\nServicio: " + servicio + " (L" + precio + ")" +
+                                            "\nEstado: " + estado
                             );
                         }
 

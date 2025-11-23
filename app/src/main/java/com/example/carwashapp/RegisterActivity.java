@@ -41,7 +41,6 @@ public class RegisterActivity extends AppCompatActivity {
         btnRegistrar.setOnClickListener(v -> registrarUsuario());
     }
 
-
     private void registrarUsuario() {
 
         String nombre = etNombre.getText().toString().trim();
@@ -51,29 +50,71 @@ public class RegisterActivity extends AppCompatActivity {
         String confirm = etConfirmPassword.getText().toString().trim();
         String pais = etPais.getText().toString().trim();
 
-        // VALIDACIONES
+        // ============================================================
+        // VALIDACIONES - CAMPOS VACÍOS
+        // ============================================================
         if (nombre.isEmpty() || apellido.isEmpty() || correo.isEmpty() ||
                 pass.isEmpty() || confirm.isEmpty() || pais.isEmpty()) {
             mostrar("Todos los campos son obligatorios");
             return;
         }
 
-        if (!Patterns.EMAIL_ADDRESS.matcher(correo).matches()) {
-            mostrar("Correo no válido");
+        // ============================================================
+        // VALIDACIÓN: NOMBRE SOLO LETRAS
+        // ============================================================
+        if (!nombre.matches("[a-zA-ZÁÉÍÓÚáéíóúñÑ ]+")) {
+            etNombre.setError("El nombre no debe contener números");
+            etNombre.requestFocus();
             return;
         }
 
+        // ============================================================
+        // VALIDACIÓN: APELLIDO SOLO LETRAS
+        // ============================================================
+        if (!apellido.matches("[a-zA-ZÁÉÍÓÚáéíóúñÑ ]+")) {
+            etApellido.setError("El apellido no debe contener números");
+            etApellido.requestFocus();
+            return;
+        }
+
+        // ============================================================
+        // VALIDACIÓN: PAÍS SOLO LETRAS
+        // ============================================================
+        if (!pais.matches("[a-zA-ZÁÉÍÓÚáéíóúñÑ ]+")) {
+            etPais.setError("El país no debe contener números");
+            etPais.requestFocus();
+            return;
+        }
+
+        // ============================================================
+        // VALIDACIÓN: CORREO FORMATO CORRECTO
+        // ============================================================
+        if (!Patterns.EMAIL_ADDRESS.matcher(correo).matches()) {
+            etCorreo.setError("Correo no válido");
+            etCorreo.requestFocus();
+            return;
+        }
+
+        // ============================================================
+        // VALIDACIÓN: CONTRASEÑA MÍNIMA
+        // ============================================================
         if (pass.length() < 6) {
             mostrar("La contraseña debe tener al menos 6 caracteres");
             return;
         }
 
+        // ============================================================
+        // VALIDACIÓN: CONTRASEÑAS IGUALES
+        // ============================================================
         if (!pass.equals(confirm)) {
-            mostrar("Las contraseñas no coinciden");
+            etConfirmPassword.setError("Las contraseñas no coinciden");
+            etConfirmPassword.requestFocus();
             return;
         }
 
+        // ============================================================
         // PETICIÓN VOLLEY
+        // ============================================================
         StringRequest request = new StringRequest(
                 Request.Method.POST,
                 URL_REGISTRAR,
@@ -82,11 +123,22 @@ public class RegisterActivity extends AppCompatActivity {
                         JSONObject json = new JSONObject(response);
 
                         if (json.getBoolean("ok")) {
+
                             mostrar("Registro exitoso");
                             startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
                             finish();
+
                         } else {
-                            mostrar(json.getString("msg"));
+
+                            String msg = json.getString("msg");
+
+                            // Validación directa desde la API
+                            if (msg.toLowerCase().contains("correo")) {
+                                etCorreo.setError("El correo ya está registrado");
+                                etCorreo.requestFocus();
+                            }
+
+                            mostrar(msg);
                         }
 
                     } catch (Exception e) {

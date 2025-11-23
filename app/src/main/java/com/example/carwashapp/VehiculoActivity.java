@@ -21,7 +21,7 @@ public class VehiculoActivity extends AppCompatActivity {
     private ListView listVehiculos;
     private ArrayList<String> listaVehiculos = new ArrayList<>();
 
-    private int ID_USUARIO = 1; // cámbialo si usas SharedPreferences
+    private int ID_USUARIO;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +29,16 @@ public class VehiculoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_vehiculos);
 
         listVehiculos = findViewById(R.id.listVehiculos);
+
+        // 🔥 OBTENER ID GUARDADO DESDE LOGIN
+        ID_USUARIO = getSharedPreferences("usuario", MODE_PRIVATE)
+                .getInt("id_usuario", -1);
+
+        if (ID_USUARIO == -1) {
+            Toast.makeText(this, "Error de sesión. Vuelve a iniciar sesión.", Toast.LENGTH_LONG).show();
+            finish();
+            return;
+        }
 
         cargarVehiculos();
     }

@@ -21,12 +21,13 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
         // ==========================
-        // RECIBIR EL ID
+        // OBTENER ID DESDE SHAREDPREFERENCES
         // ==========================
-        ID_USUARIO = getIntent().getIntExtra("id_usuario", -1);
+        SharedPreferences prefs = getSharedPreferences("usuario", MODE_PRIVATE);
+        ID_USUARIO = prefs.getInt("id_usuario", -1);
 
         if (ID_USUARIO == -1) {
-            // Si algo sale mal, cerramos sesión sin mostrar Toast
+            // Sesión inválida → volver al login
             Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
@@ -45,24 +46,26 @@ public class HomeActivity extends AppCompatActivity {
         btnPerfil = findViewById(R.id.btnPerfil);
 
         // ==========================
-        // FUNCIONES DE BOTONES
+        // ACCIONES
         // ==========================
 
+        // Solicitar Cotización
         btnSolicitarCotizacion.setOnClickListener(v ->
                 startActivity(new Intent(this, SolicitarCotizacionActivity.class))
         );
 
+        // Historial
         btnHistorialServicios.setOnClickListener(v ->
                 startActivity(new Intent(this, HistorialServiciosActivity.class))
         );
 
+        // Calificación
         btnCalificacionServicio.setOnClickListener(v ->
                 startActivity(new Intent(this, CalificacionServicioActivity.class))
         );
 
         // Cerrar sesión
         btnHome.setOnClickListener(v -> {
-            SharedPreferences prefs = getSharedPreferences("usuario", MODE_PRIVATE);
             prefs.edit().clear().apply();
 
             Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
@@ -71,7 +74,7 @@ public class HomeActivity extends AppCompatActivity {
             finish();
         });
 
-        // IR A PERFIL (MANDAMOS EL ID)
+        // PERFIL → MANDAMOS EL ID DEL USUARIO
         btnPerfil.setOnClickListener(v -> {
             Intent intent = new Intent(HomeActivity.this, PerfilUsuarioActivity.class);
             intent.putExtra("id_usuario", ID_USUARIO);

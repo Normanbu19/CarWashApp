@@ -25,7 +25,7 @@ public class AdminUsuariosActivity extends AppCompatActivity {
     ArrayList<String> datos = new ArrayList<>();
     ArrayList<Integer> ids = new ArrayList<>();
 
-    String URL = "https://18.191.153.112/api_carwash/listar_usuarios.php";
+    String URL = "http://18.191.153.112/api_carwash/usuarios/listar.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,12 +46,17 @@ public class AdminUsuariosActivity extends AppCompatActivity {
         StringRequest req = new StringRequest(Request.Method.GET, URL,
                 res -> {
                     try {
-                        JSONArray arr = new JSONArray(res);
+                        JSONObject json = new JSONObject(res);
+                        if (!json.getBoolean("ok")) return;
+
+                        JSONArray arr = json.getJSONArray("data");
+
                         datos.clear();
                         ids.clear();
 
                         for (int i = 0; i < arr.length(); i++) {
                             JSONObject o = arr.getJSONObject(i);
+
                             ids.add(o.getInt("id"));
 
                             datos.add(
@@ -65,9 +70,10 @@ public class AdminUsuariosActivity extends AppCompatActivity {
                         list.setAdapter(new ArrayAdapter<>(this,
                                 android.R.layout.simple_list_item_1, datos));
 
-                    } catch (Exception e) { }
+                    } catch (Exception ignored) {}
                 },
-                err -> {});
+                err -> {}
+        );
 
         Volley.newRequestQueue(this).add(req);
     }

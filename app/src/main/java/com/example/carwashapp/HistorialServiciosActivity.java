@@ -26,12 +26,25 @@ public class HistorialServiciosActivity extends AppCompatActivity {
 
     private Button btnFiltroAceite, btnFiltroLavados, btnHistorialVehiculos;
 
-    private int ID_USUARIO = 1; // Se debe recibir con intent
+    private int ID_USUARIO;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_historial_servicios);
+
+        // ============================================
+        // OBTENER ID DEL USUARIO DE SHAREDPREFERENCES
+        // ============================================
+        ID_USUARIO = getSharedPreferences("usuario", MODE_PRIVATE)
+                .getInt("id_usuario", -1);
+
+        if (ID_USUARIO == -1) {
+            Toast.makeText(this, "Error de sesión, inicia nuevamente", Toast.LENGTH_LONG).show();
+            startActivity(new Intent(this, LoginActivity.class));
+            finish();
+            return;
+        }
 
         listHistorial = findViewById(R.id.listHistorial);
         btnFiltroAceite = findViewById(R.id.btnFiltroAceite);
@@ -58,7 +71,10 @@ public class HistorialServiciosActivity extends AppCompatActivity {
 
                         JSONObject json = new JSONObject(resp);
 
-                        if (!json.getBoolean("ok")) return;
+                        if (!json.getBoolean("ok")) {
+                            Toast.makeText(this, json.getString("msg"), Toast.LENGTH_SHORT).show();
+                            return;
+                        }
 
                         JSONArray data = json.getJSONArray("data");
 

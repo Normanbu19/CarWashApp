@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.Request;
@@ -98,18 +99,24 @@ public class PerfilUsuarioActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQ_CAMARA && resultCode == Activity.RESULT_OK) {
-            fotoBitmap = (Bitmap) data.getExtras().get("data");
-            imgPerfil.setImageBitmap(fotoBitmap);
-            imgPerfil.setVisibility(ImageView.VISIBLE);
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQ_CAMARA && resultCode == Activity.RESULT_OK && data != null) {
+            Bundle extras = data.getExtras();
+            if (extras != null) {
+                fotoBitmap = (Bitmap) extras.get("data");
+                imgPerfil.setImageBitmap(fotoBitmap);
+                imgPerfil.setVisibility(ImageView.VISIBLE);
+            }
         }
     }
 
 
+
     private void cargarPerfil() {
 
-        String url = "http://18.191.153.112/api_carwash/usuarios/listar.php?id=" + ID_USUARIO;
+        String url = "http://18.191.153.112/api_carwash/usuarios/ver.php?id=" + ID_USUARIO;
 
         StringRequest req = new StringRequest(Request.Method.GET, url,
                 resp -> {

@@ -25,8 +25,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
 
 public class SolicitarCotizacionActivity extends AppCompatActivity {
 
@@ -42,17 +40,27 @@ public class SolicitarCotizacionActivity extends AppCompatActivity {
     private TextView txtResumen;
     private Button btnEnviarCotizacion;
 
-    private int ID_USUARIO = 1;
+    // ❗ AHORA YA NO ES 1 FIJO — SE CARGA DESDE SharedPreferences
+    private int ID_USUARIO;
 
     public static String LAT = "0";
     public static String LNG = "0";
     public static String DIRECCION_TEXTUAL = "N/A";
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_solicitar_cotizacion);
+
+        // 🔥 OBTENER ID DE USUARIO LOGUEADO
+        ID_USUARIO = getSharedPreferences("usuario", MODE_PRIVATE)
+                .getInt("id_usuario", -1);
+
+        if (ID_USUARIO == -1) {
+            Toast.makeText(this, "Error de sesión. Inicia sesión nuevamente.", Toast.LENGTH_LONG).show();
+            finish();
+            return;
+        }
 
         spinnerVehiculo = findViewById(R.id.spinnerVehiculo);
         spinnerServicio = findViewById(R.id.spinnerServicio);
@@ -79,7 +87,6 @@ public class SolicitarCotizacionActivity extends AppCompatActivity {
 
         btnEnviarCotizacion.setOnClickListener(v -> validarAntesDeEnviar());
     }
-
 
     private void cargarVehiculos() {
 
@@ -128,7 +135,6 @@ public class SolicitarCotizacionActivity extends AppCompatActivity {
         Volley.newRequestQueue(this).add(request);
     }
 
-
     private void cargarServicios() {
 
         ArrayList<String> lista = new ArrayList<>();
@@ -144,7 +150,6 @@ public class SolicitarCotizacionActivity extends AppCompatActivity {
         spinnerServicio.setAdapter(adapter);
     }
 
-
     private void abrirCalendario() {
 
         Calendar c = Calendar.getInstance();
@@ -155,7 +160,6 @@ public class SolicitarCotizacionActivity extends AppCompatActivity {
         DatePickerDialog dp = new DatePickerDialog(
                 this,
                 (view, year, month, dayOfMonth) -> {
-                    // FORMATO CORRECTO PARA MYSQL → YYYY-MM-DD
                     String fechaFormateada = String.format("%04d-%02d-%02d", year, month + 1, dayOfMonth);
                     txtFecha.setText(fechaFormateada);
                 },
@@ -164,7 +168,6 @@ public class SolicitarCotizacionActivity extends AppCompatActivity {
 
         dp.show();
     }
-
 
     private void abrirReloj() {
 
@@ -181,7 +184,6 @@ public class SolicitarCotizacionActivity extends AppCompatActivity {
 
         tp.show();
     }
-
 
     private void validarAntesDeEnviar() {
 
@@ -208,13 +210,6 @@ public class SolicitarCotizacionActivity extends AppCompatActivity {
             return;
         }
 
-        actualizarResumen();
-        enviarCotizacion();
-    }
-
-
-    private void actualizarResumen() {
-
         String resumen =
                 "Vehículo: " + listaVehiculos.get(spinnerVehiculo.getSelectedItemPosition()) + "\n" +
                         "Servicio: " + spinnerServicio.getSelectedItem().toString() + "\n" +
@@ -223,9 +218,13 @@ public class SolicitarCotizacionActivity extends AppCompatActivity {
                         "Ubicación: " + (rbCentro.isChecked() ? "Centro" : "Domicilio") + "\n" +
                         "Dirección: " + DIRECCION_TEXTUAL;
 
-        txtResumen.setText(resumen);
+        new androidx.appcompat.app.AlertDialog.Builder(this)
+                .setTitle("Confirmar cotización")
+                .setMessage(resumen + "\n\n¿Deseas confirmar esta cotización?")
+                .setPositiveButton("Aceptar", (dialog, which) -> enviarCotizacion())
+                .setNegativeButton("Cancelar", null)
+                .show();
     }
-
 
     private void enviarCotizacion() {
 
@@ -258,9 +257,7 @@ public class SolicitarCotizacionActivity extends AppCompatActivity {
                 Request.Method.POST,
                 url,
                 params,
-                response -> {
-                    Toast.makeText(this, "Cotización enviada correctamente", Toast.LENGTH_LONG).show();
-                },
+                response -> Toast.makeText(this, "Cotización enviada correctamente", Toast.LENGTH_LONG).show(),
                 error -> {
                     if (error.networkResponse != null && error.networkResponse.data != null) {
                         String body = new String(error.networkResponse.data);
@@ -277,7 +274,6 @@ public class SolicitarCotizacionActivity extends AppCompatActivity {
                 com.android.volley.DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
         ));
 
-        // 🟢 AHORA SÍ USAMOS LA MISMA COLA CORRECTA
         MySingleton.getInstance(this).addToRequestQueue(request);
     }
 }

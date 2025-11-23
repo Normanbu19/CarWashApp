@@ -1,6 +1,5 @@
 package com.example.carwashapp;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -20,15 +19,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class AgregarVehiculoActivity extends AppCompatActivity {
-    private EditText etMarca;
-    private EditText etModelo;
-    private EditText etPlaca;
-    private EditText etAnio;
-    private EditText etTipoAceite;
+
+    private EditText etMarca, etModelo, etPlaca, etAnio, etTipoAceite;
     private Button btnGuardar;
 
-    // Puedes centralizar la URL en ApiConfig si prefieres
-    private static final String URL_INSERTAR = "http://18.191.153.112/api_carwash/vehiculos/insertar.php";
+    private static final String URL_INSERTAR =
+            "http://18.191.153.112/api_carwash/vehiculos/insertar.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,114 +35,76 @@ public class AgregarVehiculoActivity extends AppCompatActivity {
         etModelo = findViewById(R.id.edtModelo);
         etPlaca = findViewById(R.id.edtPlaca);
         etAnio = findViewById(R.id.edtAnio);
-        etTipoAceite = findViewById(R.id.edtTipoAceite); // asegúrate existe en tu XML
+        etTipoAceite = findViewById(R.id.edtTipoAceite);
         btnGuardar = findViewById(R.id.btnGuardar);
 
-        btnGuardar.setOnClickListener(v -> {
-            String marca = etMarca.getText().toString().trim();
-            String modelo = etModelo.getText().toString().trim();
-            String placa = etPlaca.getText().toString().trim();
-            String anio = etAnio.getText().toString().trim();
-            String tipoAceite = etTipoAceite.getText().toString().trim();
-
-            // validaciones
-            if (TextUtils.isEmpty(marca)) {
-                etMarca.setError("Ingresa la marca");
-                etMarca.requestFocus();
-                return;
-            }
-            if (TextUtils.isEmpty(modelo)) {
-                etModelo.setError("Ingresa el modelo");
-                etModelo.requestFocus();
-                return;
-            }
-            if (TextUtils.isEmpty(anio)) {
-                etAnio.setError("Ingresa el año");
-                etAnio.requestFocus();
-                return;
-            }
-            if (TextUtils.isEmpty(tipoAceite)) {
-                etTipoAceite.setError("Ingresa tipo de aceite");
-                etTipoAceite.requestFocus();
-                return;
-            }
-
-            int idUsuario = getUserId(); // obtiene id del usuario (SharedPreferences o 1 por defecto)
-            guardarVehiculoEnServidor(idUsuario, marca, modelo, placa, anio, tipoAceite);
-        });
+        btnGuardar.setOnClickListener(v -> guardar());
     }
 
-    private void guardarVehiculoEnServidor(int idUsuario, String marca, String modelo, String placa, String anio, String tipoAceite) {
-        String url = URL_INSERTAR;
+    private void guardar() {
 
-        StringRequest request = new StringRequest(Request.Method.POST, url,
-                response -> {
-                    // El PHP responde con ok([...], "Vehículo guardado") o fail(...)
-                    // Intentamos parsear JSON, pero si llega texto lo mostramos igualmente.
+        String marca = etMarca.getText().toString().trim();
+        String modelo = etModelo.getText().toString().trim();
+        String placa = etPlaca.getText().toString().trim();
+        String anio = etAnio.getText().toString().trim();
+        String tipoAceite = etTipoAceite.getText().toString().trim();
+
+        if (TextUtils.isEmpty(marca)) { etMarca.setError("Ingresa la marca"); return; }
+        if (TextUtils.isEmpty(modelo)) { etModelo.setError("Ingresa el modelo"); return; }
+        if (TextUtils.isEmpty(anio)) { etAnio.setError("Ingresa el año"); return; }
+        if (TextUtils.isEmpty(tipoAceite)) { etTipoAceite.setError("Ingresa el tipo de aceite"); return; }
+
+        int idUsuario = getUserId();
+        if (idUsuario == -1) {
+            Toast.makeText(this, "Error: sesión no válida", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        enviarAlServidor(idUsuario, marca, modelo, placa, anio, tipoAceite);
+    }
+
+    private void enviarAlServidor(int idUsuario, String marca, String modelo,
+                                  String placa, String anio, String tipoAceite) {
+
+        StringRequest req = new StringRequest(Request.Method.POST, URL_INSERTAR,
+                resp -> {
                     try {
-                        JSONObject json = new JSONObject(response);
+                        JSONObject json = new JSONObject(resp);
 
-                        // Buscamos keys comunes: success, message, data.id o id
-                        boolean success = json.optBoolean("success", true);
-                        String message = json.optString("message", null);
-
-                        // Algunos utilitarios devuelven {"data":{"id":...}, ...}
-                        String insertedId = null;
-                        if (json.has("data")) {
-                            JSONObject data = json.optJSONObject("data");
-                            if (data != null) {
-                                insertedId = String.valueOf(data.optInt("id", -1));
-                            }
-                        }
-                        if (insertedId == null && json.has("id")) {
-                            insertedId = String.valueOf(json.optInt("id", -1));
+                        if (json.getBoolean("ok")) {
+                            Toast.makeText(this, "Vehículo guardado", Toast.LENGTH_LONG).show();
+                            finish();
+                        } else {
+                            Toast.makeText(this, json.getString("msg"), Toast.LENGTH_LONG).show();
                         }
 
-                        if (message == null) {
-                            // si no trae message, usar raw response summary
-                            message = success ? "Vehículo guardado" : "Respuesta del servidor";
-                        }
-
-                        Toast.makeText(AgregarVehiculoActivity.this, message, Toast.LENGTH_LONG).show();
-                        // aquí puedes devolver el id creado a la activity anterior si quieres:
-                        // Intent i = new Intent(); i.putExtra("vehiculo_id", insertedId); setResult(RESULT_OK, i);
-                        finish();
-                    } catch (JSONException e) {
-                        // No es JSON: mostrar raw response
-                        Toast.makeText(AgregarVehiculoActivity.this, response, Toast.LENGTH_LONG).show();
-                        finish();
+                    } catch (Exception e) {
+                        Toast.makeText(this, "Respuesta inesperada: " + resp, Toast.LENGTH_LONG).show();
                     }
                 },
                 error -> {
-                    // Error de red o servidor: mostrar e intentar fallback (simulación)
-                    String msg = error.getMessage();
-                    if (msg == null) msg = "Error de red";
-                    Toast.makeText(AgregarVehiculoActivity.this, "No se pudo conectar: " + msg + "\nSe ha simulado guardado local para pruebas.", Toast.LENGTH_LONG).show();
-                    // Para pruebas locales sin VPS, podemos simular éxito:
-                    finish();
-                }) {
+                    Toast.makeText(this, "Error de conexión", Toast.LENGTH_LONG).show();
+                }
+        ) {
             @Override
             protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<>();
-                // parámetros que tu PHP espera
-                params.put("id_usuario", String.valueOf(idUsuario));
-                params.put("marca", marca);
-                params.put("modelo", modelo);
-                params.put("anio", anio);
-                params.put("tipo_aceite", tipoAceite);
-                // placa es opcional en PHP
-                if (!TextUtils.isEmpty(placa)) params.put("placa", placa);
-                return params;
+                Map<String, String> p = new HashMap<>();
+                p.put("id_usuario", String.valueOf(idUsuario));
+                p.put("marca", marca);
+                p.put("modelo", modelo);
+                p.put("anio", anio);
+                p.put("tipo_aceite", tipoAceite);
+                if (!TextUtils.isEmpty(placa)) p.put("placa", placa);
+                return p;
             }
         };
 
-        // timeout/retry opcional: puedes mejorar la política de reintentos si lo deseas
-        MySingleton.getInstance(this).addToRequestQueue(request);
+        MySingleton.getInstance(this).addToRequestQueue(req);
     }
 
+    // ✅ PARA TOMAR SIEMPRE EL MISMO ID DEL LOGIN
     private int getUserId() {
-        SharedPreferences prefs = getSharedPreferences("app_prefs", Context.MODE_PRIVATE);
-        return prefs.getInt("user_id",1);
+        SharedPreferences prefs = getSharedPreferences("usuario", MODE_PRIVATE);
+        return prefs.getInt("id_usuario", -1);
     }
-
 }

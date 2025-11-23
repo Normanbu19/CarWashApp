@@ -3,7 +3,9 @@ package com.example.carwashapp;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Patterns;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -12,7 +14,6 @@ import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
 
 import org.json.JSONObject;
-import android.util.Patterns;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,21 +37,20 @@ public class LoginActivity extends AppCompatActivity {
         btnRecuperarContrasena = findViewById(R.id.btnRecuperarContrasena);
         btnRegister = findViewById(R.id.btnRegister);
 
-        // 🔵 LOGIN
         btnLogin.setOnClickListener(v -> login());
 
-        // 🔵 REGISTRAR — (ANTES SE HABÍA BORRADO)
         btnRegister.setOnClickListener(v ->
                 startActivity(new Intent(LoginActivity.this, RegisterActivity.class))
         );
 
-        // 🔵 RECUPERAR CONTRASEÑA — (ANTES TAMBIÉN SE BORRÓ)
         btnRecuperarContrasena.setOnClickListener(v ->
                 startActivity(new Intent(LoginActivity.this, RecuperarContrasenaActivity.class))
         );
     }
 
-    // LOGIN ORDENADO
+    // =====================================================
+    // LOGIN USUARIO NORMAL
+    // =====================================================
     private void login() {
 
         String correo = etEmail.getText().toString().trim();
@@ -58,21 +58,30 @@ public class LoginActivity extends AppCompatActivity {
 
         if (!validar(correo, contrasena)) return;
 
-        // Intento 1: usuario normal
         StringRequest reqUser = new StringRequest(Request.Method.POST, URL_LOGIN,
                 res -> {
                     try {
+
                         JSONObject json = new JSONObject(res);
 
                         if (json.getBoolean("ok")) {
-                            int id = json.getJSONObject("data").getInt("id");
+
+                            int idUsuario = json.getJSONObject("data").getInt("id");
+
+                            // GUARDAR EN SHAREDPREFERENCES
+                            SharedPreferences prefs = getSharedPreferences("usuario", MODE_PRIVATE);
+                            prefs.edit()
+                                    .putInt("id_usuario", idUsuario)
+                                    .apply();
+
+                            // IR A HOME
                             Intent i = new Intent(this, HomeActivity.class);
-                            i.putExtra("id_usuario", id);
                             startActivity(i);
                             finish();
                             return;
                         }
 
+                        // Intentar admin
                         validarAdmin(correo, contrasena);
 
                     } catch (Exception e) {
@@ -93,7 +102,9 @@ public class LoginActivity extends AppCompatActivity {
         MySingleton.getInstance(this).addToRequestQueue(reqUser);
     }
 
-    // ADMIN
+    // =====================================================
+    // LOGIN ADMIN
+    // =====================================================
     private void validarAdmin(String correo, String contrasena) {
 
         StringRequest reqAdmin = new StringRequest(Request.Method.POST, URL_ADMIN,
@@ -102,10 +113,14 @@ public class LoginActivity extends AppCompatActivity {
                         JSONObject json = new JSONObject(res);
 
                         if (json.getBoolean("ok")) {
-                            JSONObject d = json.getJSONObject("data");
+
+                            SharedPreferences prefs = getSharedPreferences("usuario", MODE_PRIVATE);
+                            prefs.edit()
+                                    .putInt("id_admin", json.getJSONObject("data").getInt("id"))
+                                    .putString("rol_admin", json.getJSONObject("data").getString("rol"))
+                                    .apply();
+
                             Intent i = new Intent(this, AdminDashboardActivity.class);
-                            i.putExtra("id_admin", d.getInt("id"));
-                            i.putExtra("rol_admin", d.getString("rol"));
                             startActivity(i);
                             finish();
                             return;
@@ -131,6 +146,9 @@ public class LoginActivity extends AppCompatActivity {
         MySingleton.getInstance(this).addToRequestQueue(reqAdmin);
     }
 
+    // =====================================================
+    // VALIDACIÓN
+    // =====================================================
     private boolean validar(String correo, String contrasena) {
 
         if (correo.isEmpty()) {
@@ -139,15 +157,15 @@ public class LoginActivity extends AppCompatActivity {
             return false;
         }
 
-        if (contrasena.isEmpty()) {
-            etPassword.setError("Ingresa tu contraseña");
-            etPassword.requestFocus();
-            return false;
-        }
-
         if (!Patterns.EMAIL_ADDRESS.matcher(correo).matches()) {
             etEmail.setError("Correo no válido");
             etEmail.requestFocus();
+            return false;
+        }
+
+        if (contrasena.isEmpty()) {
+            etPassword.setError("Ingresa tu contraseña");
+            etPassword.requestFocus();
             return false;
         }
 
