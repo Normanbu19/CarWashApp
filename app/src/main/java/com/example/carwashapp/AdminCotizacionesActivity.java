@@ -40,6 +40,7 @@ public class AdminCotizacionesActivity extends AppCompatActivity {
     String URL_LISTAR = "http://18.191.153.112/api_carwash/cotizaciones/listar.php";
     String URL_CONFIRMAR = "http://18.191.153.112/api_carwash/cotizaciones/confirmar.php";
     String URL_COMPLETAR = "http://18.191.153.112/api_carwash/cotizaciones/completar.php";
+    String URL_ELIMINAR = "http://18.191.153.112/api_carwash/cotizaciones/eliminar_cotizacion.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,13 +57,11 @@ public class AdminCotizacionesActivity extends AppCompatActivity {
 
         cargar();
 
-        // 👉 CLICK EN ITEM → MENÚ DE DECISIÓN
         list.setOnItemClickListener((adapterView, view, position, id) -> {
             int idCotizacion = ids.get(position);
             mostrarMenuAcciones(idCotizacion);
         });
 
-        // 🔍 BÚSQUEDA EN TIEMPO REAL
         edtBuscar.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             @Override public void afterTextChanged(Editable s) {}
@@ -74,9 +73,9 @@ public class AdminCotizacionesActivity extends AppCompatActivity {
         });
     }
 
-    // =====================================================
+    // =============================
     // LISTAR COTIZACIONES
-    // =====================================================
+    // =============================
     void cargar() {
 
         StringRequest req = new StringRequest(Request.Method.GET, URL_LISTAR,
@@ -128,9 +127,9 @@ public class AdminCotizacionesActivity extends AppCompatActivity {
         Volley.newRequestQueue(this).add(req);
     }
 
-    // =====================================================
-    // 🔍 FILTRO
-    // =====================================================
+    // =============================
+    // BUSQUEDA
+    // =============================
     void filtrar(String texto) {
         datosFiltrados.clear();
 
@@ -143,12 +142,12 @@ public class AdminCotizacionesActivity extends AppCompatActivity {
         adaptador.notifyDataSetChanged();
     }
 
-    // =====================================================
-    // MENÚ DE ACCIONES
-    // =====================================================
+    // =============================
+    // MENÚ DE OPCIONES
+    // =============================
     void mostrarMenuAcciones(int idCotizacion) {
 
-        String[] opciones = {"Confirmar", "Marcar como Completada", "Cancelar"};
+        String[] opciones = {"Confirmar", "Marcar como Completada", "Eliminar", "Cancelar"};
 
         new AlertDialog.Builder(this)
                 .setTitle("Acción para Cotización #" + idCotizacion)
@@ -156,35 +155,25 @@ public class AdminCotizacionesActivity extends AppCompatActivity {
 
                     if (which == 0) {
                         confirmarCotizacion(idCotizacion);
-                    } else if (which == 1) {
+                    }
+                    else if (which == 1) {
                         completarCotizacion(idCotizacion);
+                    }
+                    else if (which == 2) {
+                        eliminarCotizacion(idCotizacion);
                     }
 
                 })
                 .show();
     }
 
-    // =====================================================
+    // =============================
     // CONFIRMAR
-    // =====================================================
+    // =============================
     void confirmarCotizacion(int idCotizacion) {
 
         StringRequest req = new StringRequest(Request.Method.POST, URL_CONFIRMAR,
-                res -> {
-                    try {
-                        JSONObject json = new JSONObject(res);
-
-                        if (json.getBoolean("ok")) {
-                            Toast.makeText(this, "Cotización confirmada", Toast.LENGTH_SHORT).show();
-                            cargar();
-                        } else {
-                            Toast.makeText(this, json.getString("msg"), Toast.LENGTH_SHORT).show();
-                        }
-
-                    } catch (Exception e) {
-                        Toast.makeText(this, "Error inesperado", Toast.LENGTH_SHORT).show();
-                    }
-                },
+                res -> procesarRespuesta(res, "Cotización confirmada"),
                 err -> Toast.makeText(this, "Error de conexión", Toast.LENGTH_SHORT).show()
         ) {
             @Override
@@ -198,27 +187,13 @@ public class AdminCotizacionesActivity extends AppCompatActivity {
         Volley.newRequestQueue(this).add(req);
     }
 
-    // =====================================================
+    // =============================
     // COMPLETAR
-    // =====================================================
+    // =============================
     void completarCotizacion(int idCotizacion) {
 
         StringRequest req = new StringRequest(Request.Method.POST, URL_COMPLETAR,
-                res -> {
-                    try {
-                        JSONObject json = new JSONObject(res);
-
-                        if (json.getBoolean("ok")) {
-                            Toast.makeText(this, "Cotización completada", Toast.LENGTH_SHORT).show();
-                            cargar();
-                        } else {
-                            Toast.makeText(this, json.getString("msg"), Toast.LENGTH_SHORT).show();
-                        }
-
-                    } catch (Exception e) {
-                        Toast.makeText(this, "Error inesperado", Toast.LENGTH_SHORT).show();
-                    }
-                },
+                res -> procesarRespuesta(res, "Cotización completada"),
                 err -> Toast.makeText(this, "Error de conexión", Toast.LENGTH_SHORT).show()
         ) {
             @Override
@@ -230,5 +205,44 @@ public class AdminCotizacionesActivity extends AppCompatActivity {
         };
 
         Volley.newRequestQueue(this).add(req);
+    }
+
+    // =============================
+    // ELIMINAR
+    // =============================
+    void eliminarCotizacion(int idCotizacion) {
+
+        StringRequest req = new StringRequest(Request.Method.POST, URL_ELIMINAR,
+                res -> procesarRespuesta(res, "Cotización eliminada"),
+                err -> Toast.makeText(this, "Error de conexión", Toast.LENGTH_SHORT).show()
+        ) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("id", String.valueOf(idCotizacion));
+                return params;
+            }
+        };
+
+        Volley.newRequestQueue(this).add(req);
+    }
+
+    // =============================
+    // PROCESAR RESPUESTA JSON
+    // =============================
+    private void procesarRespuesta(String res, String mensajeOk) {
+        try {
+            JSONObject json = new JSONObject(res);
+
+            if (json.getBoolean("ok")) {
+                Toast.makeText(this, mensajeOk, Toast.LENGTH_SHORT).show();
+                cargar();
+            } else {
+                Toast.makeText(this, json.getString("msg"), Toast.LENGTH_SHORT).show();
+            }
+
+        } catch (Exception e) {
+            Toast.makeText(this, "Error procesando respuesta", Toast.LENGTH_SHORT).show();
+        }
     }
 }
